@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-exports.init = function () {
+exports.init = function (server) {
     
     console.log('Setup routes');
 
@@ -9,7 +9,12 @@ exports.init = function () {
     //READ - all to-do's
     server.get('/api/todos', function (req, res) {
 
+        var Todo = mongoose.model('Todo');
 
+        Todo.find(function (err, docs) {
+
+            res.send(docs);
+        });
 
     });
 
@@ -19,7 +24,7 @@ exports.init = function () {
 
 
     });
-    
+
 
 
     // UPDATE
