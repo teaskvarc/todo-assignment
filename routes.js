@@ -7,7 +7,7 @@ exports.init = function (server) {
 
 
     //READ - all to-do's
-    server.get('/api/todos', function (req, res) {
+    server.get('/api/todo', function (req, res) {
 
         var Todo = mongoose.model('Todo');
 
@@ -21,7 +21,19 @@ exports.init = function (server) {
     //CREATE
     server.post('/api/todo', function (req, res) {
 
-
+        var Todo = mongoose.model('Todo');
+        
+        var data = req.body;
+        
+        var title = data.title;
+        
+        var newTodo = new Todo(data);
+        
+        newTodo.save(function (err) {
+            
+            console.log(err);
+            res.send(data);
+        });
 
     });
 
@@ -38,7 +50,18 @@ exports.init = function (server) {
     //DELETE
     server.delete('/api/todo/:id', function (req, res) {
 
-
-
+        var id = req.params.id;
+        
+        var Todo = mongoose.model('Todo');
+        
+        Todo.findByIdAndRemove(id, function (err, doc) {
+            
+            if(!err){
+                res.send(doc);
+            }else{
+                res.sendStatus(400);
+            }
+            
+        });
     });
 };
