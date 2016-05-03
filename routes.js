@@ -25,9 +25,9 @@ exports.init = function (server) {
         
         var data = req.body;
         
-        var title = data.title;
+        var title = data.text;
         
-        var newTodo = new Todo(data);
+        var newTodo = new Todo({ title:title, done:false });
         
         newTodo.save(function (err) {
             
@@ -42,8 +42,7 @@ exports.init = function (server) {
     // UPDATE
     server.put('/api/todo/:id', function (req,res) {
 
-
-
+        
 
     });
 

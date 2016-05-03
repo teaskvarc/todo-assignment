@@ -1,15 +1,5 @@
 angular.module('toDo').factory('todoService',function($http) {
 
-    function guid() {
-        function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
-        }
-        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-            s4() + '-' + s4() + s4() + s4();
-    }
-
 
     var todo = {
         model: {
@@ -34,10 +24,12 @@ angular.module('toDo').factory('todoService',function($http) {
 
         //POST
 
-        create:function (todo, cb) {
+        create:function (_todo, cb) {
 
-            $http.post('/api/todo', todo)
+            $http.post('http://localhost:3000/api/todo', _todo)
                 .then(function (res) {
+
+                    todo.model.list.push(res.data);
 
                     console.log(res);
                     if(cb){
