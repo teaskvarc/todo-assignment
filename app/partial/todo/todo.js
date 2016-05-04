@@ -1,4 +1,4 @@
-angular.module('toDo').controller('TodoCtrl',function($scope, todoService){
+angular.module('toDo').controller('TodoCtrl', function ($scope, todoService) {
 
 
     $scope.todos = [
@@ -7,22 +7,26 @@ angular.module('toDo').controller('TodoCtrl',function($scope, todoService){
 
     ];
 
-    $scope.getTotalTodos = function(){
+    $scope.todos = todoService.model.list;
+
+    $scope.getTotalTodos = function () {
 
         return $scope.todos.length;
     };
 
     $scope.addTodo = function () {
 
-        $scope.todos.push({text:$scope.formTodoText, done:false});
+        todoService.create({todo: $scope.formTodoText, done: false});
         $scope.formTodoText = '';
     };
 
-    $scope.removeTodo = function () {
+    $scope.removeTodo = function (id) {
 
-        $scope.todos = _.filter($scope.todos, function (todo) {
-            return !todo.done;
+        _.each($scope.todos, function (todo, i) {
 
+            if (todo.done) {
+                todoService.remove(todo._id);
+            }
         });
 
     };

@@ -1,15 +1,5 @@
 angular.module('toDo').factory('todoService',function($http) {
 
-    function guid() {
-        function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
-        }
-        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-            s4() + '-' + s4() + s4() + s4();
-    }
-
 
     var todo = {
         model: {
@@ -21,23 +11,32 @@ angular.module('toDo').factory('todoService',function($http) {
 
         remove:function (id) {
 
-            var promise = $http.delete('/api/todo'+id);
+            var promise = $http.delete('http://localhost:3000/api/todo/' + id);
 
-            angular.forEach(todo.model.list, function (item, i) {
+            promise.then(function (res) {
 
-                if(id === item._id){
-                    todo.model.list.splice(i, 1);
-                }
+                console.log(res);
+
+                angular.forEach(todo.model.list, function (item, i) {
+
+                    if(id === item._id){
+                        todo.model.list.splice(i, 1);
+                    }
+                });
             });
+
+            return promise;
 
         },
 
-        //POST
+        //POST//
 
-        create:function (todo, cb) {
+        create:function (_todo, cb) {
 
-            $http.post('/api/todo', todo)
+            $http.post('http://localhost:3000/api/todo',_todo)
                 .then(function (res) {
+
+                    todo.model.list.push(res.data);
 
                     console.log(res);
                     if(cb){
@@ -45,6 +44,34 @@ angular.module('toDo').factory('todoService',function($http) {
                     }
                 });
 
+        },
+
+        update: function (id, todoData, cb) {
+
+            $http.put('http://localhost:3000/api/todo' + id, todoData)
+                .then(function (res) {
+
+                    if(cb){
+                        cb();
+                    }
+                });
+        },
+
+        getAll: function (cb) {
+
+            var promise = $http.get('http://localhost:3000/api/todos');
+
+            promise.then(function (res) {
+
+                todo.model.list = res.data;
+
+                if(cb){
+                    cb(res.data);
+                }
+
+            });
+
+            return promise;
         }
 
     };

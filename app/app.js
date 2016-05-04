@@ -5,7 +5,14 @@ angular.module('toDo').config(function($stateProvider, $urlRouterProvider) {
     $stateProvider.state('todo', {
         url: '/todo',
         templateUrl: 'partial/todo/todo.html',
-        controller: 'TodoCtrl'
+        controller: 'TodoCtrl',
+        resolve: {
+            todos: function (todoService) {
+                
+                return todoService.getAll();
+            }
+            
+        }
     });
     /* Add New States Above */
     $urlRouterProvider.otherwise('/todo');

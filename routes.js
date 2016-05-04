@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+var mongoose    = require('mongoose');
+var bodyParser  = require('body-parser');
 
 exports.init = function (server) {
     
@@ -7,13 +8,18 @@ exports.init = function (server) {
 
 
     //READ - all to-do's
-    server.get('/api/todo', function (req, res) {
+    server.get('/api/todos', function (req, res) {
 
         var Todo = mongoose.model('Todo');
 
         Todo.find(function (err, docs) {
 
-            res.send(docs);
+            if(!err){
+                res.send(docs);   
+            } else {
+                res.send(err);
+            }
+            
         });
 
     });
@@ -23,16 +29,18 @@ exports.init = function (server) {
 
         var Todo = mongoose.model('Todo');
         
-        var data = req.body;
+        console.log(req.body);
         
-        var title = data.title;
+        var todo = new Todo(req.body);
         
-        var newTodo = new Todo(data);
-        
-        newTodo.save(function (err) {
+        todo.save(function (err) {
             
-            console.log(err);
-            res.send(data);
+            if(!err){
+                res.send(todo);
+            }else{
+                console.log(err);
+                res.sendStatus(400);
+            }
         });
 
     });
@@ -42,9 +50,21 @@ exports.init = function (server) {
     // UPDATE
     server.put('/api/todo/:id', function (req,res) {
 
+        var id = req.params.id;
 
+        var Todo = mongoose.model('Todo');
 
+        Todo.findByIdAndUpdate(id, req.body, {new:true}, function (err, doc) {
 
+            if(!err){
+                res.send(doc);
+            }else{
+                console.log(req.body);
+                console.log(err);
+            }
+
+        });
+        
     });
 
     //DELETE
