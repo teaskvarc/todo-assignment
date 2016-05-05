@@ -1,11 +1,7 @@
 angular.module('toDo').controller('TodoCtrl', function ($scope, todoService) {
 
 
-    $scope.todos = [
-
-        {text: 'Eat', done: false},
-
-    ];
+    $scope.todos = todoService.model.list;
 
     $scope.todos = todoService.model.list;
 
@@ -16,7 +12,14 @@ angular.module('toDo').controller('TodoCtrl', function ($scope, todoService) {
 
     $scope.addTodo = function () {
 
+
         todoService.create({todo: $scope.formTodoText, done: false});
+
+        //$scope.todos.push({text:$scope.formTodoText, done:false});
+
+        todoService.create({text:$scope.formTodoText, done:false});
+
+
         $scope.formTodoText = '';
     };
 
@@ -32,4 +35,3 @@ angular.module('toDo').controller('TodoCtrl', function ($scope, todoService) {
     };
 
 });
-

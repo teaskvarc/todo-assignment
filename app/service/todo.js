@@ -33,7 +33,11 @@ angular.module('toDo').factory('todoService',function($http) {
 
         create:function (_todo, cb) {
 
+
             $http.post('http://localhost:3000/api/todo',_todo)
+
+            $http.post('http://localhost:3000/api/todo', _todo)
+
                 .then(function (res) {
 
                     todo.model.list.push(res.data);

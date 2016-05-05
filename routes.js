@@ -28,60 +28,71 @@ exports.init = function (server) {
     server.post('/api/todo', function (req, res) {
 
         var Todo = mongoose.model('Todo');
-        
+
         console.log(req.body);
-        
+
+
         var todo = new Todo(req.body);
-        
+
         todo.save(function (err) {
-            
-            if(!err){
-                res.send(todo);
-            }else{
-                console.log(err);
-                res.sendStatus(400);
-            }
+
+            var title = data.text;
+
+            var newTodo = new Todo({title: title, done: false});
+
+            newTodo.save(function (err) {
+
+
+                if (!err) {
+                    res.send(todo);
+                } else {
+                    console.log(err);
+                    res.sendStatus(400);
+                }
+            });
+
         });
 
     });
+    
 
 
+        // UPDATE
+        server.put('/api/todo/:id', function (req, res) {
 
-    // UPDATE
-    server.put('/api/todo/:id', function (req,res) {
 
-        var id = req.params.id;
+            var id = req.params.id;
 
-        var Todo = mongoose.model('Todo');
+            var Todo = mongoose.model('Todo');
 
-        Todo.findByIdAndUpdate(id, req.body, {new:true}, function (err, doc) {
+            Todo.findByIdAndUpdate(id, req.body, {new: true}, function (err, doc) {
 
-            if(!err){
-                res.send(doc);
-            }else{
-                console.log(req.body);
-                console.log(err);
-            }
+                if (!err) {
+                    res.send(doc);
+                } else {
+                    console.log(req.body);
+                    console.log(err);
+                }
+
+            });
 
         });
-        
-    });
 
-    //DELETE
-    server.delete('/api/todo/:id', function (req, res) {
+        //DELETE
+        server.delete('/api/todo/:id', function (req, res) {
 
-        var id = req.params.id;
-        
-        var Todo = mongoose.model('Todo');
-        
-        Todo.findByIdAndRemove(id, function (err, doc) {
-            
-            if(!err){
-                res.send(doc);
-            }else{
-                res.sendStatus(400);
-            }
-            
+            var id = req.params.id;
+
+            var Todo = mongoose.model('Todo');
+
+            Todo.findByIdAndRemove(id, function (err, doc) {
+
+                if (!err) {
+                    res.send(doc);
+                } else {
+                    res.sendStatus(400);
+                }
+
+            });
         });
-    });
-};
+    };
