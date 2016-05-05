@@ -3,7 +3,7 @@ angular.module('toDo').controller('TodoCtrl', function ($scope, todoService) {
 
     $scope.todos = todoService.model.list;
 
-    $scope.todos = todoService.model.list;
+
 
     $scope.getTotalTodos = function () {
 
@@ -15,9 +15,7 @@ angular.module('toDo').controller('TodoCtrl', function ($scope, todoService) {
 
         todoService.create({todo: $scope.formTodoText, done: false});
 
-        //$scope.todos.push({text:$scope.formTodoText, done:false});
-
-        todoService.create({text:$scope.formTodoText, done:false});
+        //todoService.create({text:$scope.formTodoText, done:false});
 
 
         $scope.formTodoText = '';

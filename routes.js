@@ -27,51 +27,79 @@ exports.init = function (server) {
     //CREATE
     server.post('/api/todo', function (req, res) {
 
+        var todoData = req.body;
         var Todo = mongoose.model('Todo');
+        var newTodo = new Todo(todoData);
 
-        console.log(req.body);
+        newTodo.save(function (err) {
 
+            if(!err){
+                res.send(newTodo);
+            }else{
+                console.log(err);
+                res.sendStatus(400);
+            }
 
-        var todo = new Todo(req.body);
-
-        todo.save(function (err) {
-
-            var title = data.text;
-
-            var newTodo = new Todo({title: title, done: false});
-
-            newTodo.save(function (err) {
-
-
-                if (!err) {
-                    res.send(todo);
-                } else {
-                    console.log(err);
-                    res.sendStatus(400);
-                }
-            });
 
         });
 
     });
-    
+
+
+        //var Todo = mongoose.model('Todo');
+
+         //console.log(req.body);
+
+        //var todo = new Todo(req.body);
+
+        //todo.save(function (err) {
+
+//            if(!err){
+  //              res.send(todo);
+    //        }else{
+      //          console.log(err);
+        //        res.sendStatus(400);
+          //  }
+
+
+
+
+
+
+
+   //     var data = req.body;
+        
+   //     var todo = data.text;
+        
+   //     var newTodo = new Todo({todo: todo, done: false});
+        
+    //    newTodo.save(function (err) {
+    //
+  //              if (!err) {
+   //                 res.send(todo);
+    //            } else {
+     //               console.log(err);
+   //                 res.sendStatus(400);
+    //            }
+//            });
+
 
 
         // UPDATE
         server.put('/api/todo/:id', function (req, res) {
 
-
             var id = req.params.id;
-
             var Todo = mongoose.model('Todo');
+            var todoData = req.body;
 
-            Todo.findByIdAndUpdate(id, req.body, {new: true}, function (err, doc) {
+            Todo.findByIdAndUpdate(id, todoData, {new: true}, function (err, doc) {
 
                 if (!err) {
                     res.send(doc);
                 } else {
-                    console.log(req.body);
+                    res.sendStatus(400);
                     console.log(err);
+                    
                 }
 
             });
@@ -89,8 +117,9 @@ exports.init = function (server) {
 
                 if (!err) {
                     res.send(doc);
-                } else {
+                }else{
                     res.sendStatus(400);
+
                 }
 
             });

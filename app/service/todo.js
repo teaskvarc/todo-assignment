@@ -10,12 +10,13 @@ angular.module('toDo').factory('todoService',function($http) {
         //DELETE
 
         remove:function (id) {
+            console.log(id);
 
-            var promise = $http.delete('http://localhost:3000/api/todo/' + id);
+            return $http.delete('http://localhost:3000/api/todo/' + id)
 
-            promise.then(function (res) {
+            .then(function (res) {
 
-                console.log(res);
+
 
                 angular.forEach(todo.model.list, function (item, i) {
 
@@ -25,53 +26,44 @@ angular.module('toDo').factory('todoService',function($http) {
                 });
             });
 
-            return promise;
+
 
         },
 
         //POST//
 
-        create:function (_todo, cb) {
+        create:function (todoData) {
 
 
-            $http.post('http://localhost:3000/api/todo',_todo)
-
-            $http.post('http://localhost:3000/api/todo', _todo)
+            $http.post('http://localhost:3000/api/todo', todoData)
 
                 .then(function (res) {
 
                     todo.model.list.push(res.data);
 
                     console.log(res);
-                    if(cb){
-                        cb(res.data);
-                    }
+
                 });
 
         },
 
-        update: function (id, todoData, cb) {
+        update: function (todoData) {
 
-            $http.put('http://localhost:3000/api/todo' + id, todoData)
-                .then(function (res) {
+            console.log(todoData);
 
-                    if(cb){
-                        cb();
-                    }
-                });
+            var id = todoData._id;
+
+            return $http.put('http://localhost:3000/api/todo/' + id, todoData);
+
         },
 
-        getAll: function (cb) {
+        getAll: function () {
 
             var promise = $http.get('http://localhost:3000/api/todos');
 
             promise.then(function (res) {
 
                 todo.model.list = res.data;
-
-                if(cb){
-                    cb(res.data);
-                }
 
             });
 
